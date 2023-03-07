@@ -9,3 +9,6 @@ ENV/
 # Pycharm's original files
 main.py
 .idea/
+
+# git
+.git-credentials

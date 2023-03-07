@@ -23,56 +23,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
 db = SQLAlchemy(app)  # SQLAlchemy从app.config里读取: 数据库连接的信息
 
 
-# # 测试是否连接成功
-# with app.app_context():
-#     with db.engine.connect() as conn:
-#         rs = conn.execute(text("select 1"))
-#         print(rs.fetchone()) #返回(1,)
-class User(db.Model):
-    __tablename__ = "user-table"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(100), nullable=False)  # varchar
-    password = db.Column(db.String(100), nullable=False)
-
-
+# 测试是否连接成功
 with app.app_context():
-    db.create_all()  # 把所有表加到数据库里
+    with db.engine.connect() as conn:
+        rs = conn.execute(text("select 1"))
+        print(rs.fetchone()) #返回(1,)
 
-
-@app.route("/user/add") #CRUD都可以这样写
-def add_user():
-    user = User(username="Wan Xinran", password="wxr@2023")
-    db.session.add(user)
-    db.session.commit()
-    return "New user added!"
-
-@app.route("/user/query")
-def query_user():
-    user = User.query.get(1) # query based on 主键
-    # users = User.query.all() # fetch all users
-    print(f"{user.id}: {user.username} - {user.password}")
-    return "Query succeeded!"
-
-@app.route("/user/multi_query")
-def multi_query_user():
-    users = User.query.filter_by(username="Wan Xinran")
-    for user in users:
-        print(f"{user.id}: {user.username} - {user.password}")
-    return "Multiple query succeeded!"
-
-@app.route("/user/update")
-def query_user():
-    user = User.query.filter_by(username="Wan Xinran").first()
-    user.password = "newPassword"
-    db.session.commit()
-    return "User updated succeeded!"
-
-@app.route("/user/delete")
-def query_user():
-    user = User.query.get(1)
-    db.session.delete(user)
-    db.session.commmit()
-    return "User deleted succeeded!"
+@app.route("/") #定路由的装饰器
+def test():
+    return "<p>Connection succeeded!</p>"
 
 
 
