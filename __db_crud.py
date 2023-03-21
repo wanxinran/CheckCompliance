@@ -10,7 +10,7 @@ HOSTNAME = "127.0.0.1"  # MySQL所在主机名
 PORT = 3306
 USERNAME = "root"
 PASSWORD = "mysql@2022"
-DATABASE = "pracDB"
+DATABASE = "mysql"
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = \
