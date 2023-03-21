@@ -7,7 +7,7 @@ ENV/
 
 
 # Pycharm's original files
-main.py
+# main.py
 .idea/
 
 # git
