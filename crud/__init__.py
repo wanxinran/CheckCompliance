@@ -1,1 +1,1 @@
-from crud_user import crud_user
+from crud.crud_user import crud_user

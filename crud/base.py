@@ -1,11 +1,11 @@
 from typing import TypeVar, Type, Union, List, Dict, Any
 from sqlalchemy.ext.declarative import declarative_base
-from db import get_session
+from db import session
 
 # constrained type
 Base = declarative_base()
 ModelType = TypeVar("ModelType", bound=Base)
-db = get_session()
+db = session
 
 
 class CRUDBase:
