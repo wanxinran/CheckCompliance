@@ -13,7 +13,8 @@ class Mysql:
     def __init__(self, app: Optional[Flask] = None):
         self.app = app
         config = {
-            "HOST": "127.0.0.1:3306",
+            # "HOST": "127.0.0.1:3306",
+            "HOST": "192.168.31.31",
             "USER": "root",
             "PASSWORD": "mysql@2022",
             "DB": "mysql"
