@@ -2,8 +2,11 @@ from db import db
 import sqlalchemy as sa
 from dataclasses import dataclass
 
+from decoratory import serializable
+
 
 @dataclass
+@serializable
 class User(db.Model): # a table or a user
     __tablename__ = "user-table"
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)

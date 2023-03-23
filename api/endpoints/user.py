@@ -4,9 +4,14 @@ from crud import crud_user
 userBp = Blueprint('user', __name__)
 
 
-@userBp.route("/user/<id>", methods=['GET'])
-def get_user(_id: str):
-    return crud_user.get(_id)
+@userBp.route("/user/<string:user_id>", methods=['GET'])
+def get_user(user_id: str):
+    return jsonify(crud_user.get(user_id))
+
+
+@userBp.route("/get/name/<string:name>", methods=['GET'])
+def get_name(name: str):
+    return jsonify(crud_user.get_user_by_name(name))
 
 
 @userBp.route("/")
@@ -51,11 +56,13 @@ def colors(palette):
     if palette == 'all':
         result = all_colors
     else:
-        result = {palette: all_colors.get(palette)}
+        result = { palette: all_colors.get(palette) }
 
     return jsonify(result)
 
-
+@userBp.route("/get_all", methods=['GET'])
+def get_all():
+    return jsonify(crud_user.get_many())
 
 @userBp.route("/add")
 def add():
