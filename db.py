@@ -4,6 +4,8 @@ from flask import Flask, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import scoped_session, Session
 
+from urllib import parse
+
 
 class Mysql:
     db = None
@@ -18,17 +20,28 @@ class Mysql:
             "DB": "pracDB"
         }
 
+        self.engine_config = {
+
+        }
+
         self.db = SQLAlchemy()
 
     def init_app(self, app: Optional[Flask] = None):
         self.app = app
         if "MYSQL" not in app.config:
             app.config.setdefault("MYSQL", self.config)
+
             app.config.setdefault("SQLALCHEMY_DATABASE_URI",
-                                  f"mysql+pymysql://{app.config['MYSQL']['USER']}:{app.config['MYSQL']['PASSWORD']}@{app.config['MYSQL']['HOST']}/{app.config['MYSQL']['DB']}?charset=utf8mb4")
+                                  f"mysql+pymysql://{app.config['MYSQL']['USER']}:{parse.quote_plus(app.config['MYSQL']['PASSWORD'])}@{app.config['MYSQL']['HOST']}/{app.config['MYSQL']['DB']}?charset=utf8mb4")
+            # app.config.setdefault("SQLALCHEMY_BINDS", {
+            #     'wxr': app.config['SQLALCHEMY_DATABASE_URI']
+            # })
 
         self.db.init_app(app)
         self.init_db()
+        self.db.metadata.reflect()
+        # self.init_table()
+        print(self.db.metadata.tables.keys())
 
     def init_table(self):
         self.db.create_all()

@@ -27,12 +27,12 @@ class User(db.Model):
 with app.app_context():
     db.create_all()  # 把所有表加到数据库里
 
-user = User(username="Wan Xinran", password="wxr@2023")
-with app.app_context():
-    db.session.add(user)
-    db.session.commit()
-    db.session.delete(User.query.get(1))
-    db.session.commit()
+# user = User(username="Wan Xinran", password="wxr@2023")
+# with app.app_context():
+#     db.session.add(user)
+#     db.session.commit()
+#     db.session.delete(User.query.get(1))
+#     db.session.commit()
 
 @app.route("/user/add")
 def add_user():

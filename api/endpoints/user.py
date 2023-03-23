@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-
+from models.user import User
 from crud import crud_user
 
 userBp = Blueprint('user', __name__)
@@ -52,11 +52,20 @@ def colors(palette):
     if palette == 'all':
         result = all_colors
     else:
-        result = { palette: all_colors.get(palette) }
+        result = {palette: all_colors.get(palette)}
 
     return jsonify(result)
 
 
 @userBp.route("/get_all", methods=['GET'])
 def get_all():
-    return jsonify(crud_user.get_many())
+    return crud_user.get_many()
+
+
+@userBp.route("/add")
+def add():
+    user = {
+        "username": "123",
+        "password": "123234"
+    }
+    return jsonify(crud_user.create(**user))
