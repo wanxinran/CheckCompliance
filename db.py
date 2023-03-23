@@ -39,9 +39,8 @@ class Mysql:
 
         self.db.init_app(app)
         self.init_db()
-        self.db.metadata.reflect()
-        # self.init_table()
-        print(self.db.metadata.tables.keys())
+        self.db.reflect()
+        self.init_table()
 
     def init_table(self):
         self.db.create_all()
