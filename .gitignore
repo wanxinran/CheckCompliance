@@ -12,3 +12,6 @@ ENV/
 
 # git
 .git-credentials
+
+# project-specific
+__db_crud.py
