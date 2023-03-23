@@ -24,8 +24,8 @@ class CRUDBase:
         query = db.query(self.model)
         if filters:
             for itr in filters:
-                column = getattr(self.model, itr['field'])
-                query = query.filter(column == itr['value'])
+                column = getattr(self.model, list(itr.keys())[0])
+                query = query.filter(column == list(itr.values()))
         return [c.to_dict() for c in query.offset(offset).limit(limit).all()]
 
     def create(self, **kwargs):

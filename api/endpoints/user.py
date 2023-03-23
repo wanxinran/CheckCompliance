@@ -60,11 +60,9 @@ def colors(palette):
 
     return jsonify(result)
 
-
 @userBp.route("/get_all", methods=['GET'])
 def get_all():
     return jsonify(crud_user.get_many())
-
 
 @userBp.route("/add")
 def add():
@@ -73,3 +71,19 @@ def add():
         "password": "123234"
     }
     return jsonify(crud_user.create(**user))
+
+@userBp.route("/get")
+def get():
+    temp = crud_user.get(5)
+    print(temp, type(temp))
+    return jsonify(temp.username)
+
+@userBp.route("/get_many", methods=['GET'])
+def get_all():
+    temp = crud_user.get_many(filters=[{"username": "123"}])
+    return jsonify([t.username for t in temp])
+
+
+
+
+
