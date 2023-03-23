@@ -12,10 +12,10 @@ class Mysql:
     def __init__(self):
         self.config = {
             # "HOST": "127.0.0.1:3306",
-            "HOST": "192.168.31.31",
+            "HOST": "192.168.31.32",
             "USER": "root",
             "PASSWORD": "mysql@2022",
-            "DB": "mysql"
+            "DB": "pracDB"
         }
 
         self.db = SQLAlchemy()
@@ -25,8 +25,7 @@ class Mysql:
         if "MYSQL" not in app.config:
             app.config.setdefault("MYSQL", self.config)
             app.config.setdefault("SQLALCHEMY_DATABASE_URI",
-                                  f"mysql+pymysql://{app.config['MYSQL']['USER']}:{app.config['MYSQL']['PASSWORD']}\
-                                  @{app.config['MYSQL']['HOST']}/{app.config['MYSQL']['DB']}?charset=utf8mb4")
+                                  f"mysql+pymysql://{app.config['MYSQL']['USER']}:{app.config['MYSQL']['PASSWORD']}@{app.config['MYSQL']['HOST']}/{app.config['MYSQL']['DB']}?charset=utf8mb4")
 
         self.db.init_app(app)
         self.init_db()

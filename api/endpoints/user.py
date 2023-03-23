@@ -2,12 +2,12 @@ from flask import Blueprint, jsonify
 
 from crud import crud_user
 
-userBp = Blueprint('用户模块', __name__)
+userBp = Blueprint('user', __name__)
 
 
-@userBp.route("/user/<id>")
+@userBp.route("/user/<id>", methods=['GET'])
 def get_user(_id: str):
-    return ""
+    return crud_user.get(_id)
 
 
 @userBp.route("/")
@@ -55,3 +55,8 @@ def colors(palette):
         result = { palette: all_colors.get(palette) }
 
     return jsonify(result)
+
+
+@userBp.route("/get_all", methods=['GET'])
+def get_all():
+    return jsonify(crud_user.get_many())
