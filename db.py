@@ -1,18 +1,16 @@
 from typing import Optional
 
-from pymysql import cursors, connect
-from flask import Flask, g, current_app
+from flask import Flask, g
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session, Session
 
 
 class Mysql:
     db = None
+    app = None
 
-    def __init__(self, app: Optional[Flask] = None):
-        self.app = app
-        config = {
+    def __init__(self):
+        self.config = {
             # "HOST": "127.0.0.1:3306",
             "HOST": "192.168.31.31",
             "USER": "root",
@@ -20,60 +18,28 @@ class Mysql:
             "DB": "mysql"
         }
 
-        if "MYSQL" not in app.config:
-            app.config.setdefault("MYSQL", config)
-            app.config.setdefault("SQLALCHEMY_DATABASE_URI", f"mysql+pymysql:// \
-                {current_app.config['MYSQL']['USER']}:{current_app.config['MYSQL']['PASSWORD']}\
-                @{current_app.config['MYSQL']['HOST']}/{current_app.config['MYSQL']['DB']}?charset=utf8mb4",
-                                  echo=current_app.config['DEBUG'])
+        self.db = SQLAlchemy()
 
-        self.db = SQLAlchemy(app)
-        g.setdefault('session', self.db.session)
-        g.setdefault('db', self.db)
+    def init_app(self, app: Optional[Flask] = None):
+        self.app = app
+        if "MYSQL" not in app.config:
+            app.config.setdefault("MYSQL", self.config)
+            app.config.setdefault("SQLALCHEMY_DATABASE_URI",
+                                  f"mysql+pymysql://{app.config['MYSQL']['USER']}:{app.config['MYSQL']['PASSWORD']}\
+                                  @{app.config['MYSQL']['HOST']}/{app.config['MYSQL']['DB']}?charset=utf8mb4")
+
+        self.db.init_app(app)
+        self.init_db()
 
     def init_table(self):
-        with self.app.app_context():
-            self.db.create_all()
+        self.db.create_all()
 
+    def init_db(self):
+        if 'db' not in g:
+            g.setdefault('db', self.db)
 
-def get_db():
-    if 'db' in g:
-        return g.db
-    raise Exception("Database initialization error")
-
-
-def get_session():
-    """
-    Acquire session
-    """
-    if 'session' not in g:
-        engine = create_engine(
-            f"mysql+pymysql:// \
-            {current_app.config['MYSQL']['USER']}:{current_app.config['MYSQL']['PASSWORD']}\
-            @{current_app.config['MYSQL']['HOST']}/{current_app.config['MYSQL']['DB']}?charset=utf8mb4",
-            echo=current_app.config['DEBUG']
-        )
-
-        Session = sessionmaker(bind=engine)
-        g.session = Session()
-    return g.session
-
-
-def get_connection():
-    """
-    pymysql connection
-    """
-    if 'py_db' not in g:
-        config = current_app.config['MYSQL']
-        g.db = connect(
-            host=config['HOST'],
-            user=config['USER'],
-            password=config['PASSWORD'],
-            db=config['DB'],
-            charset=config.get('CHARSET', 'utf8mb4'),
-            cursorclass=cursors.DictCursor
-        )
-    return g.py_db
+        if 'session' not in g:
+            g.setdefault('session', self.db.session)
 
 
 def close_connection():
@@ -81,12 +47,17 @@ def close_connection():
     close
     """
     g.pop('db', None)
-    db = g.pop('py_db', None)
+    py_db = g.pop('py_db', None)
 
-    if db is not None:
-        db.close()
+    if py_db is not None:
+        py_db.close()
 
-    session = g.pop('session', None)
+    _session = g.pop('session', None)
 
-    if session is not None:
-        session.close()
+    if _session is not None:
+        _session.close()
+
+
+mysql = Mysql()
+db: Optional[SQLAlchemy] = mysql.db
+session: Optional[scoped_session[Session]] = mysql.db.session
