@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class User(db.Model):
+class User(db.Model): # a table or a user
     __tablename__ = "user-table"
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     username = sa.Column(sa.String(100), nullable=False)  # varchar
