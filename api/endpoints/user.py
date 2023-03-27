@@ -56,13 +56,10 @@ def colors(palette):
     if palette == 'all':
         result = all_colors
     else:
-        result = { palette: all_colors.get(palette) }
+        result = {palette: all_colors.get(palette)}
 
     return jsonify(result)
 
-@userBp.route("/get_all", methods=['GET'])
-def get_all():
-    return jsonify(crud_user.get_many())
 
 @userBp.route("/add")
 def add():
@@ -74,16 +71,24 @@ def add():
 
 @userBp.route("/get")
 def get():
-    temp = crud_user.get(5)
-    print(temp, type(temp))
-    return jsonify(temp.username)
+    return jsonify(crud_user.get(5).to_dict())
+
 
 @userBp.route("/get_many", methods=['GET'])
 def get_all():
-    temp = crud_user.get_many(filters=[{"username": "123"}])
-    return jsonify([t.username for t in temp])
+    return jsonify(crud_user.get_many(filters=[{"username": "123"}]))
 
+@userBp.route("/update")
+def update():
+    new = {
+        "username": "Cindy",
+        "password": "230906"
+    }
+    old = crud_user.get(6)
+    return jsonify(crud_user.update(old, **new).to_dict())
 
-
-
-
+@userBp.route("/delete")
+def delete():
+    old = crud_user.get(9)
+    crud_user.delete(old)
+    return None

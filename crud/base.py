@@ -18,7 +18,8 @@ class CRUDBase:
         self.db = db
 
     def get(self, _id) -> Union[ModelType, None]:
-        return db.query(self.model).get(_id).to_dict()
+        # return db.query(self.model).get(_id).to_dict()
+        return db.query(self.model).get(_id)
 
     def get_many(self, filters: List[Dict[str, Any]] = None, offset: int = 0, limit: int = 10) -> List[ModelType]:
         query = db.query(self.model)

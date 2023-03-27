@@ -14,7 +14,7 @@ class Mysql:
     def __init__(self):
         self.config = {
             # "HOST": "127.0.0.1:3306",
-            "HOST": "192.168.31.32",
+            "HOST": "192.168.31.33",
             "USER": "root",
             "PASSWORD": "mysql@2022",
             "DB": "pracDB"

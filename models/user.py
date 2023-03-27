@@ -7,7 +7,7 @@ from decoratory import serializable
 
 @dataclass
 @serializable
-class User(db.Model): # a table or a user
+class User(db.Model): # a table
     __tablename__ = "user-table"
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     username = sa.Column(sa.String(100), nullable=False)  # varchar
