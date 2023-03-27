@@ -17,11 +17,7 @@ class Mysql:
             "HOST": "192.168.31.33",
             "USER": "root",
             "PASSWORD": "mysql@2022",
-            "DB": "pracDB"
-        }
-
-        self.engine_config = {
-
+            "DB": "Standards-and-Laws"
         }
 
         self.db = SQLAlchemy()
@@ -32,17 +28,14 @@ class Mysql:
             app.config.setdefault("MYSQL", self.config)
 
             app.config.setdefault("SQLALCHEMY_DATABASE_URI",
-                                  f"mysql+pymysql://{app.config['MYSQL']['USER']}:{parse.quote_plus(app.config['MYSQL']['PASSWORD'])}@{app.config['MYSQL']['HOST']}/{app.config['MYSQL']['DB']}?charset=utf8mb4")
-            # app.config.setdefault("SQLALCHEMY_BINDS", {
-            #     'wxr': app.config['SQLALCHEMY_DATABASE_URI']
-            # })
-
+                                  f"mysql+pymysql://{app.config['MYSQL']['USER']}:{parse.quote_plus(app.config['MYSQL']['PASSWORD'])}@{app.config['MYSQL']['HOST']}/{app.config['MYSQL']['DB']}?charset=utf8")
+            # app.config.setdefault("use_native_unicode", "utf8")
         self.db.init_app(app)
         self.init_db()
         self.db.reflect()
 
-        # self.init_table() # create the "test" table
-        print(self.db.metadata.tables.keys())
+        self.init_table()  # create the "test" table
+        # print(self.db.metadata.tables.keys())
 
     def init_table(self):
         self.db.create_all()

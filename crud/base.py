@@ -10,23 +10,24 @@ db = session
 
 class CRUDBase:
     """
-    curd base
+    crud base
     """
 
     def __init__(self, model: Type[ModelType]):
         self.model = model
         self.db = db
 
-    def get(self, _id) -> Union[ModelType, None]:
-        # return db.query(self.model).get(_id).to_dict()
-        return db.query(self.model).get(_id)
+    def get(self, clause_no) -> Union[ModelType, None]:
+        # clause_no = {"clause_no": "6.1.1.1"}, 是个字典
+        return db.query(self.model).get(clause_no)
 
     def get_many(self, filters: List[Dict[str, Any]] = None, offset: int = 0, limit: int = 10) -> List[ModelType]:
         query = db.query(self.model)
         if filters:
             for itr in filters:
                 column = getattr(self.model, list(itr.keys())[0])
-                query = query.filter(column == list(itr.values()))
+                # query = query.filter(column == list(itr.values())[0])
+                query = query.filter(column.op('regexp')(list(itr.values())[0])) # 可以用正则表达式
         return [c.to_dict() for c in query.offset(offset).limit(limit).all()]
 
     def create(self, **kwargs):

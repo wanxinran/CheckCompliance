@@ -1,2 +1,2 @@
-from .user import User
-from .test import Test
+# from .test import Test
+from .clause import Clause

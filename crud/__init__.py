@@ -1,1 +1,1 @@
-from crud.crud_user import crud_user
+from crud.crud_clause import crud_clause
