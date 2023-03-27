@@ -16,3 +16,5 @@ ENV/
 # project-specific
 __db_crud.py
 __pycache__/
+.__pycache__
+*/__pycache__
